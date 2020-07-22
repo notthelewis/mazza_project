@@ -1,70 +1,134 @@
-#include <stdio.h>
-#include <string.h>
-
-/*  To compile on Linux: 
-      gcc init.c -Wall 
-      
-      Run with:
-      ./a.out
+/*
+ * C program to split lines of text according to gender and age
 */
 
-int main(void) {
-  // Used to open the text file as read only
-    FILE *fp = fopen("example.txt", "r");
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-    // If file pointer (fp) is null, return 0 and print err msg
-    if (!fp) {
-        printf("Can't open file\n");
+/* Function declarations */
+int isMale(char gender, int age);
+int isFemale(char gender, int age);
+
+/* Returns true (1) if the character in the last field is M and age is 4-18 */
+int isMale(char gender, int age)
+{
+        if (gender == 'M' && age<=18 && age>=5)
+        {
+                printf("Male %i \n", age);
+                return 1;
+        }
         return 0;
+}
+
+/* Returns true (1) if the character in the last field is F and age is 4-18 */
+int isFemale(char gender, int age)
+{
+        if (gender == 'F' && age<=18 && age>=5)
+        {
+                printf("Female %i \n", age);
+                return 1;
+        }
+        return 0;
+}
+
+
+int main()
+{
+    /* File pointer to hold reference to different files */
+    FILE * fPtrIn,              // Input file
+         * fPtrMale,    // Males of school age
+         * fPtrFemale,  // Females of school age
+         * fPtrMisc;    // Data not within the given parameters
+
+    // Open all files to perform read/write.
+    fPtrIn       = fopen("data/potential-pupils.txt", "r");
+    fPtrMale     = fopen("data/males.txt" , "w");
+    fPtrFemale   = fopen("data/females.txt"  , "w");
+    fPtrMisc     = fopen("data/erroneuos.txt", "w");
+
+    // fopen() return NULL if unable to open file in given mode
+    if(fPtrIn == NULL || fPtrMale == NULL || fPtrFemale == NULL || fPtrMisc == N                                                                                                                                                                                                ULL)
+    {
+        // Unable to open file, exit program print err msg
+        printf("Unable to open file.\n");
+        printf("Check file exists and permissions are correct.\n");
+        exit(EXIT_FAILURE);
     }
 
-    // Creates a line buffer of 512 characters (0.5G)
-    char buf[512];
+    // File open success message
+    printf("File opened successfully. \n\n");
 
-    // Stores the number of rows in the file
-    int row_count = 0;
+        // current_char is the current character being read
+        char current_char;
 
-    // Stores the number of 'fields', i.e. f-name s-name age gender
+        // the line array is used to store each line
+        // line_parse is used to copy the data of line into, so the original cop                                                                                                                                                                                                y
+        // isn't changed by the strtok() function.
+
+        char line[100], line_parse[100];
+
+        // Last field is where gender is stored, ret is the token used for strto                                                                                                                                                                                                k()
+    char *last_field, *ret;
+
+    /*  age stores the 3rd field of each line, then passes it through to the
+        isMale and isFemale functions. It's used to store the age of each
+        applicant, and changes every time a newline is read into the program.
+                field_count stores the position of the field on the current line                                                                                                                                                                                                .
+
+                field 0 = first name
+                field 1 = second name
+                field 2 = age
+                field 3 = gender
+     */
+    int age = 0;
     int field_count = 0;
 
-    while (fgets(buf, 1024, fp)) {
-        field_count = 0;
-        row_count++;
+        // Read an integer and store read status in success.
+        while (fgets(line, sizeof(line), fPtrIn) != NULL)
+        {
+            // Copy the line for parsing
+            strcpy(line_parse, line);
 
-    // Skips the header
-        if (row_count == 1) {
-            continue;
-      }
+            // Separate the line into tokens
+            last_field = ret = strtok(line_parse, " ");
+            while (ret != NULL)
+            {
+                last_field = ret;
 
-  // Pointer to the broken down string, delimeted with a blank space " "
-        char *field = strtok(buf, " ");
+                if (field_count == 2)
+                {
+                        age = atoi(ret);
+                }
+                if (field_count == 4)
+                {
+                        field_count = 0;
+                }
 
-    // Whilst there is still content to read (or whilst field != null)
-        while (field) {
-          if (field_count == 0) {
-             printf("First Name:\t ");
-            }
-            if (field_count == 1) {
-              printf("Last Name:\t");
-            }
-            if (field_count == 2) {
-              printf("Age:\t\t");
-            }
-            if (field_count == 3) {
-              printf("Gender:\t\t");
+                field_count++;
+                ret = strtok(NULL, " ");
             }
 
-            printf("%s\n", field);
+            // Get the first character of the last field
+            if (last_field == NULL) current_char = '\0';
+            else current_char = last_field[0];
 
-          // Resets the pointer for next loop
-            field = strtok(NULL, " ");
-
-            field_count++;
+            // Write each line to a separate file
+            if (isMale(current_char, age))
+                fputs(line, fPtrMale);
+            else if (isFemale(current_char, age))
+                fputs(line, fPtrFemale);
+            else
+                fputs(line, fPtrMisc);
         }
-        printf("\n");
-    }
 
-    // Close file and terminate application, to prevent mem leaks
-    fclose(fp);
-    return 0;
+    // Close each file
+    fclose(fPtrIn);
+    fclose(fPtrMale);
+    fclose(fPtrFemale);
+    fclose(fPtrMisc);
+    printf("Data written to files successfully. \n");
+
+    return(0);
 }
