@@ -46,10 +46,10 @@ int main()
     fPtrIn       = fopen("data/potential-pupils.txt", "r");
     fPtrMale     = fopen("data/males.txt" , "w");
     fPtrFemale   = fopen("data/females.txt"  , "w");
-    fPtrMisc     = fopen("data/erroneuos.txt", "w");
+    fPtrMisc     = fopen("data/erroneus.txt", "w");
 
     // fopen() return NULL if unable to open file in given mode
-    if(fPtrIn == NULL || fPtrMale == NULL || fPtrFemale == NULL || fPtrMisc == N                                                                                                                                                                                                ULL)
+    if(fPtrIn == NULL || fPtrMale == NULL || fPtrFemale == NULL || fPtrMisc == NULL)
     {
         // Unable to open file, exit program print err msg
         printf("Unable to open file.\n");
@@ -64,24 +64,25 @@ int main()
         char current_char;
 
         // the line array is used to store each line
-        // line_parse is used to copy the data of line into, so the original cop                                                                                                                                                                                                y
+        // line_parse is used to copy the data of line into, so the original copy
         // isn't changed by the strtok() function.
 
         char line[100], line_parse[100];
 
-        // Last field is where gender is stored, ret is the token used for strto                                                                                                                                                                                                k()
+        // Last field is where gender is stored, ret is the token used for strtok()
     char *last_field, *ret;
 
     /*  age stores the 3rd field of each line, then passes it through to the
         isMale and isFemale functions. It's used to store the age of each
         applicant, and changes every time a newline is read into the program.
-                field_count stores the position of the field on the current line                                                                                                                                                                                                .
+
+                field_count stores the position of the field on the current line.
 
                 field 0 = first name
                 field 1 = second name
                 field 2 = age
                 field 3 = gender
-     */
+        */
     int age = 0;
     int field_count = 0;
 
