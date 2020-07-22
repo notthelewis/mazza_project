@@ -1,5 +1,7 @@
-_First, Last, Age, Gender
 Tim Smith 18 M
 Jonathon Jones 26 M
-Kathy Black 13 F
+Bill Green 4 M
+
+Kathy Black 5 F
 Sarah Saxby 28 F
+Kay Burly 4 F
