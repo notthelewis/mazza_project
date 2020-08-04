@@ -49,8 +49,7 @@ int main()
     fPtrMisc     = fopen("data/erroneus.txt", "w");
 
     // fopen() return NULL if unable to open file in given mode
-    if(fPtrIn == NULL || fPtrMale == NULL || fPtrFemale == NULL || fPtrMisc == NULL)
-    {
+    if(fPtrIn == NULL || fPtrMale == NULL || fPtrFemale == NULL || fPtrMisc == NULL){
         // Unable to open file, exit program print err msg
         printf("Unable to open file.\n");
         printf("Check file exists and permissions are correct.\n");
@@ -98,12 +97,10 @@ int main()
             {
                 last_field = ret;
 
-                if (field_count == 2)
-                {
+                if (field_count == 2){
                         age = atoi(ret);
                 }
-                if (field_count == 4)
-                {
+                if (field_count == 4){
                         field_count = 0;
                 }
 
